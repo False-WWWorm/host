@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ProjectZero</title>
+<link rel="stylesheet" href= "{% static 'css/style.css' %}">
+<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+</head>
+<body>
+<form method="POST" action="{% url 'mp3cut:mp3cut' %}">
+    {% csrf_token %}
+<input id="id" type="search" name="id" placeholder="название.mp3 начало=мм:sec конец=мм:sec" required="required">
+<input id="go" type="submit" value="Обрезать">
+</form>
+<button class="clear">Очистить очередь</button>
+<button class="test likedhide" style="position:fixed; right: 15%">uberbutton</button>
+<div id="library">
+    <ol id="root">
+        <li value="0" class="titlecontainer" style="list-style-type: none;"><div class="title">Название</div><div class="timetitle">Длительность</div></li>
+        <hr style="background-color: black;height: 2px;border: none;">
+        {% for pl in pl %}
+        <li class="itemcontainer"><div class="itemcontent"><img class="itemcover" src="./static/logo.png"><span class="trackwrapper"><a>{{ pl.2 }}</a>
+            <span class="artist">Imagine Dragons</span></span><span class="duration" style="width: 95px; display: inline-block">{{ pl.1 }}</span><button class="favorite" value="{{ pl.0 }}">❤</button><button class="newnext" value="{{ pl.0 }}">ochered</button></div></li>
+        {% endfor %}
+    </ol>
+</div>
+<a href="/admin/" id="add_music">Добавить музыку</a>
+<audio src="./static/audio/{{ pl.0.0 }}" id="audio" preload="auto"></audio>
+
+<div id="sidebar"><span class="logo">AudioPlayer</span><img class="logo" src="./static/logo.png" style="width: 150px">
+    <hr style="width: 70%;background-color: black;height: 2px;border: none;">
+<div class="collection">{% for col in col %}
+    <a href="#" style="text-decoration: none">{{ col }}</a>
+    {% endfor %}
+</div>
+</div>
+
+<div id="controls">
+    <img id="pic" src="./static/logo.png">
+    <div id="name">название</div>
+    <div id="timewrap">
+    <progress id="progressBar" max="100" value="0"></progress>
+    <div class="audio-track"><div class="time"></div></div>
+    <div id="dur" >0:00</div>
+    <div id="songlen" >0:00</div></div>
+
+    <div id="wrapper">
+        <button class="prev"><img class="icon" src="./static/css/left_arr.png"></button>
+    <div class="control pplay">
+    <span class="left"></span>
+    <span class="right"></span></div>
+    <button class="next"><img class="icon" src="./static/css/right_arr.png"></button>
+    </div>
+    <button class="rand">shuffle: off</button>
+    <input id="volumebar" type="range" min="0" max="100" value="100">
+</div>
+</body>
+
+
+<script>
+let time = document.querySelector(".time");      // Берём аудио дорожку
+let btnPrev = document.querySelector(".prev");   // Берём кнопку переключения предыдущего трека
+let btnNext = document.querySelector(".next");   // Берём кнопку переключение следующего трека
+let playlist = [
+    {% for i in pl %}
+        "{{i.0}}",
+    {% endfor %}
+];
+let library = [
+    {% for i in pl %}
+        "{{i.0}}",
+    {% endfor %}
+];
+let queue = []
+let liked = []
+let treck; // Переменная с индексом трека
+
+// Событие перед загрузкой страницы
+window.onload = function() {
+    treck = 0; // Присваиваем переменной ноль
+}
+
+function lib (exp){
+    audio.src = './static/audio/' + exp + ".mp3";
+    treck = playlist.indexOf(exp + ".mp3");
+}
+
+function switchTreck (numTreck) {
+    // Меняем значение атрибута src
+    audio.src = './static/audio/' + playlist[numTreck];
+    play();
+}
+
+function play (){
+            $('.control').addClass('ppause').removeClass('pplay')
+			audio.play();
+            let name_track = playlist[treck];
+            document.getElementById("name").innerHTML = name_track;
+    // Запуск интервала
+    audioPlay = setInterval(function() {
+        let audioTime = Math.round(audio.currentTime);
+        let audioLength = Math.round(audio.duration)
+        // Назначаем ширину элементу time
+        time.style.width = (audioTime * 100) / audioLength + '%';
+        //блок длительности трека
+        let seconds = String(audioTime%60);
+        let len = String(audioLength%60);
+        document.getElementById('dur').innerHTML = parseInt(audioTime/60) + ":" + seconds.padStart(2, '0') ;
+        document.getElementById('songlen').innerHTML = parseInt(audioLength/60) + ":" + len.padStart(2, '0') ;
+        // Свап при окончании
+        if (audioTime == audioLength && treck < (playlist.length-1)) {
+            treck++;
+            switchTreck(treck);
+        } else if (audioTime == audioLength && treck >= (playlist.length-1)) {
+            treck = 0;
+            switchTreck(treck);
+        }
+    }, 10)
+}
+
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex != 0) {
+
+
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+$('.test').on('click', function (){
+    if ($(this).hasClass('likedhide')){
+        $(this).removeClass('likedhide')
+        $(this).addClass('likedshow')
+    $(".itemcontainer").hide()
+    let pol = document.getElementById('root');
+    liked.forEach((item)=>{
+    let li = document.createElement('li');
+    li.innerText = item;
+    li.classList.add('removal');
+    pol.appendChild(li);
+})
+    }else {
+        $(this).removeClass('likedshow');
+        $(this).addClass('likedhide');
+        $(".itemcontainer").show();
+        $(".removal").remove();
+    }
+
+    });
+
+
+$('.clear').on('click', function (){
+    playlist = library.slice()
+    console.log(playlist)
+});
+
+$('.trackwrapper').on('click', function(){ //libitem play
+    lib(this.children[0].innerText);
+    play();
+});
+$('.newnext').on('click', function (){ //next queue
+    playlist.unshift(this.value)
+    console.log(playlist)
+});
+$('.rand').on('click', function (){ //shuffle
+    if ($(this).hasClass('shuffled')){
+        $('.rand').removeClass('shuffled');
+        $('.rand').html('shuffle: off');
+        playlist = library.slice();
+        console.log(playlist);
+    }else{
+        $('.rand').addClass('shuffled');
+        $('.rand').html('shuffle: on');
+        shuffle(playlist);
+        console.log(playlist);
+    }
+});
+$('.favorite').on('click', function (){ //like
+    if ($(this).hasClass('liked')){
+        $(this).removeClass('liked');
+        liked.pop(this.value);
+        console.log(liked);
+    }else{
+        $(this).addClass('liked');
+        liked.unshift(this.value);
+        tmp = [...new Set(liked)];
+        liked = tmp
+        console.log(liked);
+    }
+});
+
+$('.control').on('click', function(){ //анимация кнопки
+    if ($(this).hasClass('ppause')){
+        $('.control').removeClass('ppause');
+        $('.control').addClass('pplay');
+        audio.pause();
+        clearInterval(audioPlay);
+    }else{
+        play();
+    }
+});
+
+    //перемотка
+      var audio = document.getElementsByTagName('audio')[0];
+      var progressBar = document.getElementsByTagName('progress')[0];
+      if(audio && progressBar){
+    progressBar.addEventListener('click', function(event){
+      var x = event.pageX - this.offsetLeft;
+      var clickedValue = x * this.max / this.offsetWidth;
+      audio.currentTime = audio.duration * (clickedValue / 100);
+      progressBar.value = 0;
+    });
+      };
+
+
+btnPrev.addEventListener("click", function() {
+    progressBar.value = 0;
+    if (treck > 0) {
+        treck--;
+        switchTreck(treck);
+    } else {
+        treck = playlist.length-1;
+        switchTreck(treck);
+    }
+});
+
+btnNext.addEventListener("click", function() {
+    progressBar.value = 0;
+    if (treck < (playlist.length-1)) {
+        treck++;
+        switchTreck(treck);
+    } else {
+        treck = 0;
+        switchTreck(treck);
+    }
+});
+
+var slider = document.getElementById("volumebar");
+slider.oninput = function (){
+    audio.volume = this.value / 100;
+}
+
+</script>
+</html>

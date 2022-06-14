@@ -1,0 +1,257 @@
+ body{
+    background-color: yellowgreen;
+   }
+ form{
+    position: absolute; right: 0;
+}
+#add_music{
+    position: absolute; right: 0; top: 8%;
+}
+.clear{
+    left: calc(100% - 140px);
+    position: absolute;
+    top: 125px;
+    min-width: 135px;
+}
+
+#sidebar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 170px;
+    height: 100%;
+    background-color: #a0aed3;
+    text-align: center;
+    font-size: 24pt;
+    border-right: 2px solid #000000;
+}
+.title, .timetitle{
+    position: relative;
+    display: inline-block;
+}
+.title{
+    width: 400px;
+}
+
+#library {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    top: 150px;
+    bottom: 146px;
+    margin: 0 0 0 170px;
+    border: 3px double black;
+    padding: 20px;
+    width: calc(100% - 224px);
+}
+#library::-webkit-scrollbar {
+  width: 15px;
+  background-color: #f9f9fd;
+}
+#library::-webkit-scrollbar-thumb {
+  background-color: #727272;
+}
+#library::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  background-color: #a0aed3;
+}
+
+.itemcontainer .itemcontent{
+    height: 58px;
+}
+.itemcontainer:hover{
+    outline: 2px solid #780bd9;
+    background-color: darkgray;
+}
+.itemcontainer:hover .newnext{
+    display: inline-block;
+}
+
+.trackwrapper{
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    left: 10px;
+    width: 350px;
+    cursor: pointer;
+}
+#library a {
+    text-decoration: none;
+    position: relative;
+    font-size: 18pt;
+    font-weight: bold;
+}
+.artist{
+    position: relative;
+    display: block;
+    font-size: 18pt;
+}
+.itemcover{
+    width: 50px;
+    height: 50px;
+}
+.newnext{
+    display: none;
+}
+.favorite{
+    position: relative;
+    height: 35px;
+    width: 35px;
+    bottom: 28%;
+    left: 5%;
+}
+.favorite.liked{
+    background-color: red;
+    color: white;
+}
+
+#pic{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    left: 20px;
+    top: 8px;
+    outline: 1px solid black;
+}
+#name {
+    position: absolute;
+    top: 49%;
+    left: 172px;
+    font-size: 18pt;
+    font-weight: bold;
+}
+#timewrap{
+    left: 20%;
+    bottom: -78%;
+    position: relative;
+    height: 20px;
+}
+.audio-track {
+    width: 70%;
+    height: 8px;
+    background-color: #808080;
+    margin: 2px 0px 2px 0px;
+}
+ #progressBar {
+     position: fixed;
+	z-index: 2;
+	width: 70%;
+    height: 30px;
+	opacity:0;
+    margin: -10px 0 0 0;
+}
+.time {
+    width: 0;
+    height: 7px;
+    background-color: #ffffff;
+}
+#songlen{
+        position: absolute;
+    top: 0;
+    left: 71%;
+}
+#dur{
+    position: absolute;
+    top: 0;
+    left: -45px;
+}
+#wrapper{
+        position: relative;
+    text-align: center;
+    margin: 0 1px 0 0;
+    top: -18%;
+}
+.next, .prev{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    position: relative;
+    top: 25px;
+    cursor: pointer;
+}
+.icon{
+    position: relative;
+    top: -3px;
+    left: -8px;
+}
+#volumebar{
+    position: absolute;
+    top: 50%;
+    right: 2%;
+}
+.rand{
+    position: absolute;
+    top: 0;
+    right: 2%;
+}
+.rand.shuffled{
+    background-color: aquamarine;
+}
+#controls {
+z-index: 1;
+    position: fixed;
+    height: 140px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border: 3px double black;
+    padding: 0 0 0 15px;
+    background-color: #2f2f2f;
+    color: white;
+}
+
+.control,
+.control * {
+    box-sizing: content-box;
+    letter-spacing: 0;
+}
+.control {
+    border: 5.6px solid #ffffff;
+    border-radius: 50%;
+    margin: 10px;
+    padding: 14px;
+    width: 56px;
+    height: 56px;
+    font-size: 0;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+}
+.control,
+.control .left,
+.control .right,
+.control:before {
+    display: inline-block;
+    vertical-align: middle;
+    transition: border 0.2s, width 0.2s, height 0.2s, margin 0.2s;
+}
+.control:before {
+    content: "";
+    height: 56px;
+}
+.control.ppause .left,
+.control.ppause .right {
+    margin: 0;
+    border-left: 18.48px solid #ffffff;
+    border-top: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+    height: 48.496px;
+}
+.control.ppause .left {
+    border-right: 11.2px solid transparent;
+}
+.control.pplay .left {
+    margin-left: 9.3333335px;
+    border-left: 24.248px solid #ffffff;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-right: 0px solid transparent;
+    height: 28px;
+}
+.control.pplay .right {
+    margin: 0;
+    border-left: 24.248px solid #ffffff;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    height: 0px;
+}

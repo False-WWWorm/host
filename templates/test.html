@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ProjectZero</title>
+<link rel="stylesheet" href= "{% static 'css/style.css' %}">
+<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+</head>
+<body>
+<form method="POST" action="{% url 'mp3cut:mp3cut' %}">
+    {% csrf_token %}
+<input id="id" type="search" name="id" placeholder="название.mp3 начало=мм:sec конец=мм:sec" required="required">
+<input id="go" type="submit" value="Обрезать">
+</form>
+<span id="library">
+    {% for pl in pl %}
+        <p><a href="#" onclick="lib(this); play();" >{{ pl }}</a></p>
+    {% endfor %}
+</span>
+<a href="/admin/" id="add_music">Добавить музыку</a>
+<audio src="./static/audio/{{ pl.0 }}" id="audio" type="audio/mpeg" preload="auto">
+</audio>
+
+<div id="sidebar">sidebar text</div>
+<img src="{{ rez }}">
+
+<div id="controls">
+    <div id="name">название</div>
+    <div id="timewrap">
+    <progress id="progressBar" max="100" value="0"></progress>
+    <div class="audio-track"><div class="time"></div></div>
+    <div id="dur" >0:00</div>
+    <div id="songlen" >0:00</div></div>
+
+    <div id="wrapper">
+        <button class="prev"><img class="icon" src="./static/css/left_arr.png"></button>
+    <div class="control pplay">
+    <span class="left"></span>
+    <span class="right"></span></div>
+    <button class="next"><img class="icon" src="./static/css/right_arr.png"></button>
+    </div>
+    <input id="volumebar" type="range" min="0" max="100" value="100">
+</div>
+</body>
+
+</html>
